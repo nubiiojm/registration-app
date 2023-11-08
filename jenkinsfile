@@ -1,0 +1,29 @@
+pipeline {
+    agent  { label 'Jenkins-A' }
+    tools  {
+         jdk 'Java17
+         maven 'Maven3'
+    }
+    stages{
+        stages("Cleanup Workspace"){
+                   steps {
+                   cleanWs()
+                   }
+        }
+    stage("Checkout from SCM"){
+            steps {
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/nubiiojm/registration-app/new/main'
+            }
+    }
+    stages("Build Application"){
+       steps{
+             sh "mvn clean package"
+        }
+
+    } 
+    stages(Test Application"){
+        steps {
+            sh "mvn test"
+        }
+    }  
+}
